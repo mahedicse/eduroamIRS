@@ -1,4 +1,25 @@
-# eduroamIRS Configuration
+# eduroam Institutional Radius Server (IRS) Configuration
+
+### Server Provisioning for IRS
+
+#### Hostname Configuration:
+```` bash 
+[root@pust ~]# vim /etc/hostname
+
+idp-irs.pust.ac.bd
+````
+```` bash 
+[root@pust ~]# hostname idp-irs.pust.ac.bd
+````
+#### Check configuration:
+
+[root@pust ~]# hostname
+
+idp-irs.pust.ac.bd
+
+[root@pust ~]# hostname -d
+
+pust.ac.bd
 
 ## Installation and Configure Radius Server
 
