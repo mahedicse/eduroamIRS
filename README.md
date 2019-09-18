@@ -1,26 +1,99 @@
 # eduroam Institutional Radius Server (IRS) Configuration
 
-### Server Provisioning for IRS
+### Server Basic Configuration for IRS
 
 #### Hostname Configuration:
 ```` bash 
-[root@pust ~]# vim /etc/hostname
+# vim /etc/hostname
 
 idp-irs.pust.ac.bd
 ````
 ```` bash 
-[root@pust ~]# hostname idp-irs.pust.ac.bd
+# hostname idp-irs.pust.ac.bd
 ````
 #### Check configuration:
-
-[root@pust ~]# hostname
+```` bash 
+# hostname
 
 idp-irs.pust.ac.bd
-
-[root@pust ~]# hostname -d
-
+````
+```` bash 
+# hostname -d
 pust.ac.bd
+````
+### Disable Selinux:
+```` bash
+[root@pust ~]# vim /etc/selinux/config
 
+SELINUX=disabled
+
+# reboot
+````
+
+### Firewall Configuration 
+
+```` bash
+firewall-cmd --zone=public --permanent --add-service=http
+
+firewall-cmd --zone=public --permanent --add-service=https
+
+firewall-cmd --zone=public --permanent --add-service=radius
+
+firewall-cmd --zone=public --permanent --add-port=1812/tcp
+
+firewall-cmd --zone=public --permanent --add-port=1812/udp
+
+firewall-cmd --zone=public --permanent --add-port=1813/tcp
+
+firewall-cmd --zone=public --permanent --add-port=1813/udp
+
+firewall-cmd --reload
+
+firewall-cmd --zone=public --permanent --list-all
+````
+
+#### Output:
+```` bash
+[root@pust ~]# firewall-cmd --zone=public --permanent --add-service=http
+success
+
+[root@pust ~]# firewall-cmd --zone=public --permanent --add-service=https
+success
+
+[root@pust ~]# firewall-cmd --zone=public --permanent --add-service=radius
+success
+
+[root@pust ~]# firewall-cmd --zone=public --permanent --add-port=1812/tcp
+success
+
+[root@pust ~]# firewall-cmd --zone=public --permanent --add-port=1812/udp
+success
+
+[root@pust ~]# firewall-cmd --zone=public --permanent --add-port=1813/tcp
+success
+
+[root@pust ~]# firewall-cmd --zone=public --permanent --add-port=1813/udp
+success
+
+[root@pust ~]# firewall-cmd --reload
+success
+
+[root@pust ~]# firewall-cmd --zone=public --permanent --list-all
+public
+  target: default
+  icmp-block-inversion: no
+  interfaces:
+  sources:
+  services: ssh dhcpv6-client http https radius
+  ports: 1812/tcp 1812/udp 1813/tcp 1813/udp
+  protocols:
+  masquerade: no
+  forward-ports:
+  source-ports:
+  icmp-blocks:
+  rich rules:
+  ````
+ 
 ## Installation and Configure Radius Server
 
 ### Add EPEL repo
