@@ -562,11 +562,25 @@ Password: radius
 ````
 ![Home Page](https://user-images.githubusercontent.com/8054454/65595669-12448380-dfb7-11e9-9229-e2dde3605136.png)
 
-Create User:
+##Create an User:
 ![create-user](https://user-images.githubusercontent.com/8054454/65595735-32744280-dfb7-11e9-9a02-0a0ffc324bd9.png)
 
-List User:
+**List User:
 ![List-user](https://user-images.githubusercontent.com/8054454/65595777-4a4bc680-dfb7-11e9-994c-2d22c7750138.png)
+
+**Now Test login from command line:
+
+````
+[root@idp-irs raddb]# radtest mahedi@ins-XY.ac.bd Mhd123 localhost 0 testing123
+Sent Access-Request Id 227 from 0.0.0.0:51113 to 127.0.0.1:1812 length 87
+        User-Name = "mahedi@ins-XY.ac.bd"
+        User-Password = "Mhd123"
+        NAS-IP-Address = 127.0.0.1
+        NAS-Port = 0
+        Message-Authenticator = 0x00
+        Cleartext-Password = "Mhd123"
+Received Access-Accept Id 227 from 127.0.0.1:1812 to 127.0.0.1:51113 length 20
+````
 
 ### Confiure Radius for eduroam ## 
 
