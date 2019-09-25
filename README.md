@@ -521,8 +521,8 @@ Change directory for configuration
 Now import Daloradius mysql tables
 
 ````
-# mysql -u root -p radius < contrib/db/fr2-mysql-daloradius-and-freeradius.sql 
-# mysql -u root -p radius < contrib/db/mysql-daloradius.sql
+# mysql -u root -p radius < /var/www/html/daloradius/contrib/db/fr2-mysql-daloradius-and-freeradius.sql 
+# mysql -u root -p radius < /var/www/html/daloradius/contrib/db/mysql-daloradius.sql
 ````
 **Configure daloRADIUS database connection details:
 Then change permissions for http folder and set the right permissions for daloradius configuration file.
@@ -536,9 +536,10 @@ You should now modify daloradius.conf.php file to adjust the MySQL database info
 ````
 Especially relevant variables to configure are:
 ````
-CONFIG_DB_USER
-CONFIG_DB_PASS
-CONFIG_DB_NAME
+$configValues['CONFIG_DB_HOST'] = 'localhost';
+$configValues['CONFIG_DB_PORT'] = '3306';
+$configValues['CONFIG_DB_USER'] = 'radius';
+$configValues['CONFIG_DB_PASS'] = 'radiuspassword';
 ````
 To be sure everything works, restart radiusd,httpd and mysql:
 ````
