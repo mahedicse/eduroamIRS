@@ -505,8 +505,6 @@ post-proxy {
 # vim /etc/raddb/sites-enabled/eduroam
 ````
 
-#
-````
 ````
 server eduroam {
         authorize {
@@ -515,7 +513,7 @@ server eduroam {
                 rewrite_calling_station_id
                 if ("%{client:shortname}" != "nro-1.bdren.net.bd") {
                         update request {
-                                &Operator-Name := "1inst-xy.ac.bd"
+                                &Operator-Name := "1ins-XY.ac.bd"
                                 &Eduroam-SP-Country := "BD"
                         }
                 }
