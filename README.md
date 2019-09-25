@@ -195,8 +195,109 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/httpd.service t
 
 ## Installation and Configure Radius Server
 
+#### Install Radius Server:
+````bash
+# yum install freeradius freeradius-utils freeradius-mysql -y
+````
+**Start and enable freeradius to start at boot up:**
+````bash
+# systemctl start radiusd.service
 
-## Install Radius Server
+# systemctl enable radiusd.service
+ 
+Created symlink from /etc/systemd/system/multi-user.target.wants/radiusd.service to /usr/lib/systemd/system/radiusd.service.
+````
+**Now check the radius service status:**
+````bash
+[root@ns1 ~]# systemctl status radiusd.service
+● radiusd.service - FreeRADIUS high performance RADIUS server.
+   Loaded: loaded (/usr/lib/systemd/system/radiusd.service; enabled; vendor preset: disabled)
+   Active: active (running) since Sun 2017-08-20 02:42:40 EDT; 22s ago
+ Main PID: 8283 (radiusd)
+   CGroup: /system.slice/radiusd.service
+           └─8283 /usr/sbin/radiusd -d /etc/raddb
+
+Aug 20 02:42:39 ns1.mahedi.net systemd[1]: Starting FreeRADIUS high performance RADIUS server....
+Aug 20 02:42:40 ns1.mahedi.net systemd[1]: Started FreeRADIUS high performance RADIUS server..
+````
+
+#### Configure FreeRADIUS
+
+To Configure FreeRADIUS to use MariaDB, follow steps below.
+
+** Import the Radius database scheme to populate radius database **
+````bash
+# mysql -u root -p radius < /etc/raddb/mods-config/sql/main/mysql/schema.sql
+````
+– First you have to create a soft link for SQL under /etc/raddb/mods-enabled
+````bash
+# ln -s /etc/raddb/mods-available/sql /etc/raddb/mods-enabled/
+````
+Configure SQL module /raddb/mods-available/sql and change the database connection parameters to suite your environment:
+ ````bash
+ # vim /etc/raddb/mods-available/sql
+ ````
+sql section should look similar to below.
+````bash
+sql {
+        dialect = "mysql"
+        driver = "rlm_sql_mysql"
+        
+        sqlite {
+                filename = "/tmp/freeradius.db"
+                busy_timeout = 200
+                bootstrap = "${modconfdir}/${..:name}/main/sqlite/schema.sql"
+        }
+        
+        mysql {
+                warnings = auto
+        }
+        
+        postgresql {
+                send_application_name = yes
+        }
+        
+     # Connection info:
+     
+        server = "localhost"
+        port = 3306
+        login = "radius"
+        password = "radpass"
+        radius_db = "radius"
+        
+        acct_table1 = "radacct"
+        acct_table2 = "radacct"
+        
+        postauth_table = "radpostauth"
+        authcheck_table = "radcheck"
+        
+        groupcheck_table = "radgroupcheck"
+        authreply_table = "radreply"
+        
+        groupreply_table = "radgroupreply"
+        usergroup_table = "radusergroup"
+        delete_stale_sessions = yes
+        
+        pool {
+                start = ${thread[pool].start_servers}
+                min = ${thread[pool].min_spare_servers}
+                max = ${thread[pool].max_servers}
+                spare = ${thread[pool].max_spare_servers}
+                uses = 0
+                retry_delay = 30
+                lifetime = 0
+                idle_timeout = 60
+        }
+        
+        read_clients = yes
+        client_table = "nas"
+        
+        group_attribute = "SQL-Group"
+        
+        $INCLUDE ${modconfdir}/${.:name}/main/${dialect}/queries.conf
+}
+
+````
 
 
 
