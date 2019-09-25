@@ -557,6 +557,9 @@ Default login details are:
 Username: administrator
 Password: radius
 ````
+  
+  ``![Dalo Radius Login](https://user-images.githubusercontent.com/8054454/65595327-597e4480-dfb6-11e9-8457-62ed5dd1a679.png)``
+  
 ### Confiure Radius for eduroam ## 
 
 **Now create a virtual server for eduroam**
