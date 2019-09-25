@@ -13,20 +13,20 @@
 ```` bash 
 # vim /etc/hostname
 
-idp-irs.pust.ac.bd
+idp-irs.ins-XY.ac.bd
 ````
 ```` bash 
-# hostname idp-irs.pust.ac.bd
+# hostname idp-irs.ins-XY.ac.bd
 ````
 ##### Check configuration:
 ```` bash 
 # hostname
 
-idp-irs.pust.ac.bd
+idp-irs.ins-XY.ac.bd
 ````
 ```` bash 
 # hostname -d
-pust.ac.bd
+ins-XY.ac.bd
 ````
 #### Disable Selinux:
 ```` bash
@@ -302,10 +302,12 @@ sql {
 
 At first backup the original file:
 ````
-mv /etc/raddb/sites-available/default /etc/raddb/sites-available/default.ori
+cp /etc/raddb/sites-available/default /etc/raddb/sites-available/default.ori
 ````
-Edit /etc/raddb/sites-available/default with below configuration:
-
+**Edit /etc/raddb/sites-available/default file and replace the content with below configuration:**
+````
+# vim /etc/raddb/sites-available/default 
+````
 ````
 server default {
 listen {
@@ -416,6 +418,152 @@ post-proxy {
 }
 }
 ````
+Backup the original file:
+````
+cp /etc/raddb/sites-available/inner-tunnel /etc/raddb/sites-available/inner-tunnel.ori
+````
+Edit /etc/raddb/sites-available/inner-tunnel file and replace the content with below configuration:
+````
+# vim /etc/raddb/sites-available/inner-tunnel  
+````
+````
+server inner-tunnel {
+listen {
+       ipaddr = 127.0.0.1
+       port = 18120
+       type = auth
+}
+authorize {
+        filter_username
+        chap
+        mschap
+        suffix
+        update control {
+                &Proxy-To-Realm := LOCAL
+        }
+        eap {
+                ok = return
+        }
+        files
+        sql
+        -ldap
+        expiration
+        logintime
+        pap
+}
+authenticate {
+        Auth-Type PAP {
+                pap
+        }
+        Auth-Type CHAP {
+                chap
+        }
+        Auth-Type MS-CHAP {
+                mschap
+        }
+        mschap
+        eap
+}
+session {
+        radutmp
+        sql
+}
+post-auth {
+        sql
+        if (0) {
+                update reply {
+                        User-Name !* ANY
+                        Message-Authenticator !* ANY
+                        EAP-Message !* ANY
+                        Proxy-State !* ANY
+                        MS-MPPE-Encryption-Types !* ANY
+                        MS-MPPE-Encryption-Policy !* ANY
+                        MS-MPPE-Send-Key !* ANY
+                        MS-MPPE-Recv-Key !* ANY
+                }
+                update {
+                        &outer.session-state: += &reply:
+                }
+        }
+        Post-Auth-Type REJECT {
+                sql
+                attr_filter.access_reject
+                update outer.session-state {
+                        &Module-Failure-Message := &request:Module-Failure-Message
+                }
+        }
+}
+pre-proxy {
+}
+post-proxy {
+        eap
+}
+````
+**Now create a virtual server for eduroam
 
+````
+# vim /etc/raddb/sites-enabled/eduroam
+````
+
+#
+````
+````
+server eduroam {
+        authorize {
+                filter_username
+                rewrite_called_station_id
+                rewrite_calling_station_id
+                if ("%{client:shortname}" != "nro-1.bdren.net.bd") {
+                        update request {
+                                &Operator-Name := "1inst-xy.ac.bd"
+                                &Eduroam-SP-Country := "BD"
+                        }
+                }
+                cui
+                auth_log
+                suffix
+                eap {
+                        ok = return
+                }
+        }
+        authenticate {
+                eap
+        }
+        preacct {
+                rewrite_called_station_id
+                rewrite_calling_station_id
+                suffix
+        }
+        accounting {
+        }
+        post-auth {
+                update {
+                        &reply: += &session-state:
+                }
+                reply_log
+                f_ticks
+                remove_reply_message_if_eap
+                Post-Auth-Type REJECT {
+                        reply_log
+                        f_ticks
+                        attr_filter.access_reject
+                        eap
+                        remove_reply_message_if_eap
+                }
+        }
+        pre-proxy {
+                cui
+                pre_proxy_log
+                if("%{Packet-Type}" != "Accounting-Request") {
+                        attr_filter.pre-proxy
+                }
+        }
+        post-proxy {
+                post_proxy_log
+                attr_filter.post-proxy
+                eap
+        }
+}
+````
 
 > **ProTip:** You can disable any **Markdown extension** in the **File properties** dialog.
