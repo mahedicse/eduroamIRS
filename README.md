@@ -188,11 +188,6 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/httpd.service t
 
 ````
 
-#### Install required php
-````bash
-# yum install php-pear php-pear-DB php-devel php-mysql php-common php-gd php-mbstring php-mcrypt php php-xml -y
-````
-
 ## Installation and Configure Radius Server
 
 #### Install Radius Server:
@@ -499,7 +494,70 @@ post-proxy {
         eap
 }
 ````
-**Now create a virtual server for eduroam
+**Restart Radius Service**
+
+````
+# systemctl restart radiusd
+````
+### Installing and Configuring Daloradius
+
+#### Install required php
+````bash
+# yum install php-pear php-pear-DB php-devel php-mysql php-common php-gd php-mbstring php-mcrypt php php-xml -y
+````
+**Installing Daloradius
+Github method:
+````
+# cd /var/www/html/
+# wget https://github.com/lirantal/daloradius/archive/master.zip
+# unzip master.zip
+# mv daloradius-master/ daloradius
+````
+Change directory for configuration
+````
+# cd daloradius
+````
+**Configuring daloradius
+Now import Daloradius mysql tables
+
+````
+# mysql -u root -p radius < contrib/db/fr2-mysql-daloradius-and-freeradius.sql 
+# mysql -u root -p radius < contrib/db/mysql-daloradius.sql
+````
+**Configure daloRADIUS database connection details:
+Then change permissions for http folder and set the right permissions for daloradius configuration file.
+````
+# chown -R apache:apache /var/www/html/daloradius/
+# chmod 664 /var/www/html/daloradius/library/daloradius.conf.php
+````
+You should now modify daloradius.conf.php file to adjust the MySQL database information . Therefore, open the daloradius.conf.php and add the database username, password and db name.
+````
+# vim /var/www/html/daloradius/library/daloradius.conf.php
+````
+Especially relevant variables to configure are:
+````
+CONFIG_DB_USER
+CONFIG_DB_PASS
+CONFIG_DB_NAME
+````
+To be sure everything works, restart radiusd,httpd and mysql:
+````
+# systemctl restart radiusd.service 
+# systemctl restart mariadb.service 
+# systemctl restart httpd
+````
+Up to this point, we’ve covered complete installation and configuration of daloradius and freeradius, to access daloradius, open the link using your IP address:
+
+http://irs-lab-XY.bdren.net.bd/daloradius/login.php
+
+Default login details are:
+````
+Username: administrator
+Password: radius
+````
+### Confiure Radius for eduroam ## 
+
+**Now create a virtual server for eduroam**
 
 ````
 # vim /etc/raddb/sites-enabled/eduroam
@@ -562,6 +620,29 @@ server eduroam {
                 eap
         }
 }
+````
+**Create f_ticks for eduroam loggins**
+
+````
+# vim  /etc/raddb/mods-enabled/f_ticks
+````
+````
+linelog f_ticks {
+        filename = syslog
+        #syslog_facility = local0
+        #syslog_severity = info
+        format = ""
+        reference = "f_ticks.%{%{reply:Packet-Type}:-format}"
+        f_ticks {
+                Access-Accept = "F-TICKS/eduroam/1.0#REALM=%{Realm}#VISCOUNTRY=%{Eduroam-SP-Country}#VISINST=%{Operator-Name}#CSI=%{Calling-Station-Id}#RESULT=OK#"
+                Access-Reject = "F-TICKS/eduroam/1.0#REALM=%{Realm}#VISCOUNTRY=%{Eduroam-SP-Country}#VISINST=%{Operator-Name}#CSI=%{Calling-Station-Id}#RESULT=FAIL#"
+        }
+}
+````
+**Restart Radius Service**
+
+````
+# systemctl restart radiusd
 ````
 
 > **ProTip:** You can disable any **Markdown extension** in the **File properties** dialog.
