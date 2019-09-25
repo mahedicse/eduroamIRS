@@ -225,7 +225,7 @@ Aug 20 02:42:40 ns1.mahedi.net systemd[1]: Started FreeRADIUS high performance R
 
 To Configure FreeRADIUS to use MariaDB, follow steps below.
 
-** Import the Radius database scheme to populate radius database **
+**Import the Radius database scheme to populate radius database**
 ````bash
 # mysql -u root -p radius < /etc/raddb/mods-config/sql/main/mysql/schema.sql
 ````
@@ -298,7 +298,124 @@ sql {
 }
 
 ````
+**Configure Default virtual server for MySQL login support**
 
+At first backup the original file:
+````
+mv /etc/raddb/sites-available/default /etc/raddb/sites-available/default.ori
+````
+Edit /etc/raddb/sites-available/default with below configuration:
+
+````
+server default {
+listen {
+        type = auth
+        ipaddr = *
+        port = 0
+        limit {
+              max_connections = 16
+              lifetime = 0
+              idle_timeout = 30
+        }
+}
+listen {
+        ipaddr = *
+        port = 0
+        type = acct
+        limit {
+        }
+}
+listen {
+        type = auth
+        port = 0
+        limit {
+              max_connections = 16
+              lifetime = 0
+              idle_timeout = 30
+        }
+}
+listen {
+        ipv6addr = ::
+        port = 0
+        type = acct
+        limit {
+        }
+}
+authorize {
+        filter_username
+        preprocess
+        chap
+        mschap
+        digest
+        suffix
+        eap {
+                ok = return
+        }
+        files
+        sql
+        -ldap
+        expiration
+        logintime
+        pap
+}
+authenticate {
+        Auth-Type PAP {
+                pap
+        }
+        Auth-Type CHAP {
+                chap
+        }
+        Auth-Type MS-CHAP {
+                mschap
+        }
+        mschap
+        digest
+        eap
+}
+preacct {
+        preprocess
+        acct_unique
+        suffix
+        files
+}
+accounting {
+        detail
+        unix
+        sql
+        exec
+        attr_filter.accounting_response
+}
+session {
+        sql
+}
+post-auth {
+        if (session-state:User-Name && reply:User-Name && request:User-Name && (reply:User-Name == request:User-Name)) {
+                update reply {
+                        &User-Name !* ANY
+                }
+        }
+        update {
+                &reply: += &session-state:
+        }
+        sql
+        exec
+        remove_reply_message_if_eap
+        Post-Auth-Type REJECT {
+                sql
+                attr_filter.access_reject
+                eap
+                remove_reply_message_if_eap
+        }
+        Post-Auth-Type Challenge {
+        }
+}
+pre-proxy {
+}
+post-proxy {
+        eap
+}
+}
+````
 
 
 > **ProTip:** You can disable any **Markdown extension** in the **File properties** dialog.
