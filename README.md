@@ -13,16 +13,16 @@
 ```` bash 
 # vim /etc/hostname
 
-idp-irs.ins-XY.ac.bd
+irs-lab-XY.ins-XY.ac.bd
 ````
 ```` bash 
-# hostname idp-irs.ins-XY.ac.bd
+# hostname irs-lab-XY.ins-XY.ac.bd
 ````
 ##### Check configuration:
 ```` bash 
 # hostname
 
-idp-irs.ins-XY.ac.bd
+irs-lab-XY.ins-XY.ac.bd
 ````
 ```` bash 
 # hostname -d
