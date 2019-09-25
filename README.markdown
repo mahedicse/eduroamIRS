@@ -1,9 +1,9 @@
 ## eduroam Institutional Radius Server (IRS) Configuration Using CentOS-7
 
-### Server Basic Configuration for IRS
+### Server Basic Configuration for IRS:
 
 
-#### Update System
+#### Update System:
 
 ```` bash
 # yum update -y
@@ -38,7 +38,7 @@ SELINUX=disabled
 # reboot
 ````
 
-#### Firewall Configuration 
+#### Firewall Configuration: 
 
 ```` bash
 firewall-cmd --zone=public --permanent --add-service=http
@@ -106,9 +106,9 @@ public
 # yum install epel-release -y
 ````
 
-### Install and Configure Database
+### Install and Configure Database:
 
-#### Istall MariaDB Server
+#### Istall MariaDB Server:
 ```` bash
 # yum install mariadb-server mariadb -y
 ````
@@ -170,7 +170,7 @@ MariaDB [(none)]> quit
 Bye
 ````
 
-### Install Apache Web Server
+### Install Apache Web Server:
 ````bash 
 # yum install httpd httpd-devel -y
 ````
@@ -189,7 +189,7 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/httpd.service t
 
 ````
 
-## Installation and Configure Radius Server
+## Installation and Configure Radius Server:
 
 #### Install Radius Server:
 ````bash
@@ -217,7 +217,7 @@ Aug 20 02:42:39 ns1.mahedi.net systemd[1]: Starting FreeRADIUS high performance 
 Aug 20 02:42:40 ns1.mahedi.net systemd[1]: Started FreeRADIUS high performance RADIUS server..
 ````
 
-#### Configure FreeRADIUS
+#### Configure FreeRADIUS:
 
 To Configure FreeRADIUS to use MariaDB, follow steps below.
 
@@ -294,7 +294,7 @@ sql {
 }
 
 ````
-**Configure Default virtual server for MySQL login support**
+**Configure Default virtual server for MySQL login support:**
 
 At first backup the original file:
 ````
@@ -495,18 +495,19 @@ post-proxy {
         eap
 }
 ````
-**Restart Radius Service**
+**Restart Radius Service:**
 
 ````
 # systemctl restart radiusd
 ````
-### Installing and Configuring Daloradius
+### Installing and Configuring Daloradius:
 
-#### Install required php
+#### Install required php:
 ````bash
 # yum install php-pear php-pear-DB php-devel php-mysql php-common php-gd php-mbstring php-mcrypt php php-xml -y
 ````
-**Installing Daloradius
+**Installing Daloradius"
+
 Github method:
 ````
 # cd /var/www/html/
@@ -514,18 +515,18 @@ Github method:
 # unzip master.zip
 # mv daloradius-master/ daloradius
 ````
-Change directory for configuration
+Change directory for configuration:
 ````
 # cd daloradius
 ````
-**Configuring daloradius
+**Configuring daloradius:**
 Now import Daloradius mysql tables
 
 ````
 # mysql -u root -p radius < /var/www/html/daloradius/contrib/db/fr2-mysql-daloradius-and-freeradius.sql 
 # mysql -u root -p radius < /var/www/html/daloradius/contrib/db/mysql-daloradius.sql
 ````
-**Configure daloRADIUS database connection details:
+**Configure daloRADIUS database connection details:**
 Then change permissions for http folder and set the right permissions for daloradius configuration file.
 ````
 # chown -R apache:apache /var/www/html/daloradius/
@@ -552,23 +553,25 @@ Up to this point, we’ve covered complete installation and configuration of dal
 
 http://irs-lab-XY.bdren.net.bd/daloradius/login.php
 
-Default login details are:
-  
- ![login](https://user-images.githubusercontent.com/8054454/65595327-597e4480-dfb6-11e9-8457-62ed5dd1a679.png)
- 
+**Default login details are:**
+
 ````
 Username: administrator
 Password: radius
 ````
+  
+ ![login](https://user-images.githubusercontent.com/8054454/65595327-597e4480-dfb6-11e9-8457-62ed5dd1a679.png)
+ 
+
 ![Home Page](https://user-images.githubusercontent.com/8054454/65595669-12448380-dfb7-11e9-9229-e2dde3605136.png)
 
-##Create an User:
+**Create an User:**
 ![create-user](https://user-images.githubusercontent.com/8054454/65595735-32744280-dfb7-11e9-9a02-0a0ffc324bd9.png)
 
-**List User:
+**List User:**
 ![List-user](https://user-images.githubusercontent.com/8054454/65595777-4a4bc680-dfb7-11e9-994c-2d22c7750138.png)
 
-**Now Test login from command line:
+**Now Test login from command line:**
 
 ````
 [root@idp-irs raddb]# radtest mahedi@ins-XY.ac.bd Mhd123 localhost 0 testing123
@@ -582,7 +585,7 @@ Sent Access-Request Id 227 from 0.0.0.0:51113 to 127.0.0.1:1812 length 87
 Received Access-Accept Id 227 from 127.0.0.1:1812 to 127.0.0.1:51113 length 20
 ````
 
-### Confiure Radius for eduroam ## 
+### Confiure Radius for eduroam ### 
 
 **Now create a virtual server for eduroam**
 
