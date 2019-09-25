@@ -553,13 +553,21 @@ Up to this point, we’ve covered complete installation and configuration of dal
 http://irs-lab-XY.bdren.net.bd/daloradius/login.php
 
 Default login details are:
+  
+ ![login](https://user-images.githubusercontent.com/8054454/65595327-597e4480-dfb6-11e9-8457-62ed5dd1a679.png)
+ 
 ````
 Username: administrator
 Password: radius
 ````
-  
-  ``![Dalo Radius Login](https://user-images.githubusercontent.com/8054454/65595327-597e4480-dfb6-11e9-8457-62ed5dd1a679.png)``
-  
+![Home Page](https://user-images.githubusercontent.com/8054454/65595669-12448380-dfb7-11e9-9229-e2dde3605136.png)
+
+Create User:
+![create-user](https://user-images.githubusercontent.com/8054454/65595735-32744280-dfb7-11e9-9a02-0a0ffc324bd9.png)
+
+List User:
+![List-user](https://user-images.githubusercontent.com/8054454/65595777-4a4bc680-dfb7-11e9-994c-2d22c7750138.png)
+
 ### Confiure Radius for eduroam ## 
 
 **Now create a virtual server for eduroam**
