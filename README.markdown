@@ -19,6 +19,7 @@ irs-lab-XY.group-XY.ac.bd
 ```` bash 
 # hostname irs-lab-XY.group-XY.ac.bd
 ````
+> **Note:** Please replace **XY** with your group ID line **irs-lab-01.group-10.ac.bd**
 ##### Check configuration:
 ```` bash 
 # hostname
@@ -636,6 +637,8 @@ Password: radius
 **Create an User:**
 ![create-user](https://user-images.githubusercontent.com/8054454/65710206-5a959b80-e0b4-11e9-900d-952fab911c30.png)
 
+> **Note:** Please replace **XY** with your group ID line **irs-lab-01.group-10.ac.bd**
+
 **List User:**
 ![List-user](https://user-images.githubusercontent.com/8054454/65710312-96306580-e0b4-11e9-9f0e-4b4fd6ed508b.png)
 
@@ -652,6 +655,8 @@ Sent Access-Request Id 227 from 0.0.0.0:51113 to 127.0.0.1:1812 length 87
         Cleartext-Password = "Mhd123"
 Received Access-Accept Id 227 from 127.0.0.1:1812 to 127.0.0.1:51113 length 20
 ````
+> **Note:** Please replace **XY** with your group ID line **irs-lab-01.group-10.ac.bd**
+
 ### Confiure WLC to connect and test authentication  ### 
 
 Open /etc/raddb/clients.conf file and insert the below configuration at the end of the file:
@@ -836,6 +841,8 @@ network={
         phase1="peapver=0"
 }
 ````
+> **Note:** Please replace **XY** with your group ID line **irs-lab-01.group-10.ac.bd**
+
 Ouput for successful login:
 ````
 EAP: deinitialize previously used EAP method (21, TTLS) at EAP deinit
@@ -871,4 +878,4 @@ Thu Sep 26 18:34:30 2019 : Info: rlm_sql (sql): Opening additional connection (6
 Thu Sep 26 18:34:30 2019 : Auth: (9)   Login OK: [test@group-XY.ac.bd] (from client WLC-CONTROLLER-1 port 0 via TLS tunnel)
 Thu Sep 26 18:34:30 2019 : Auth: (10) Login OK: [test@group-XY.ac.bd] (from client WLC-CONTROLLER-1 port 1 cli A4-50-46-30-E2-D7)
 ````
-> **ProTip:** You can disable any **Markdown extension** in the **File properties** dialog.
+**!! Yah You done**
