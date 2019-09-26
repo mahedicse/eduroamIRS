@@ -90,6 +90,7 @@ success
 success
 
 [root@idp-irs ~]# firewall-cmd --zone=public --permanent --list-all
+
 public
   target: default
   icmp-block-inversion: no
