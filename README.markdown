@@ -19,7 +19,7 @@ irs-lab-XY.group-XY.ac.bd
 ```` bash 
 # hostname irs-lab-XY.group-XY.ac.bd
 ````
-> **Note:** Please replace **XY** with your group ID line **irs-lab-01.group-10.ac.bd**
+> **Note:** Please replace **XY** with your group ID line **irs-lab-01.group-01.ac.bd**
 ##### Check configuration:
 ```` bash 
 # hostname
@@ -637,7 +637,7 @@ Password: radius
 **Create an User:**
 ![create-user](https://user-images.githubusercontent.com/8054454/65710206-5a959b80-e0b4-11e9-900d-952fab911c30.png)
 
-> **Note:** Please replace **XY** with your group ID line **irs-lab-01.group-10.ac.bd**
+> **Note:** Please replace **XY** with your group ID line **test@group-01.ac.bd**
 
 **List User:**
 ![List-user](https://user-images.githubusercontent.com/8054454/65710312-96306580-e0b4-11e9-9f0e-4b4fd6ed508b.png)
@@ -647,15 +647,15 @@ Password: radius
 ````
 [root@idp-irs raddb]# radtest mahedi@group-XY.ac.bd Mhd123 localhost 0 testing123
 Sent Access-Request Id 227 from 0.0.0.0:51113 to 127.0.0.1:1812 length 87
-        User-Name = "mahedi@group-XY.ac.bd"
-        User-Password = "Mhd123"
+        User-Name = "test@group-XY.ac.bd"
+        User-Password = "test123"
         NAS-IP-Address = 127.0.0.1
         NAS-Port = 0
         Message-Authenticator = 0x00
         Cleartext-Password = "Mhd123"
 Received Access-Accept Id 227 from 127.0.0.1:1812 to 127.0.0.1:51113 length 20
 ````
-> **Note:** Please replace **XY** with your group ID line **irs-lab-01.group-10.ac.bd**
+> **Note:** Please replace **XY** with your group ID line **test@group-01.ac.bd**
 
 ### Confiure WLC to connect and test authentication  ### 
 
