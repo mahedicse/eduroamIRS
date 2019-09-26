@@ -335,7 +335,7 @@ sql {
 
 At first backup the original file:
 ````
-cp /etc/raddb/sites-available/default /etc/raddb/sites-available/default.ori
+mv /etc/raddb/sites-available/default /etc/raddb/sites-available/default.ori
 ````
 **Edit /etc/raddb/sites-available/default file and replace the content with below configuration:**
 ````
@@ -343,6 +343,7 @@ cp /etc/raddb/sites-available/default /etc/raddb/sites-available/default.ori
 ````
 ````
 server default {
+
 listen {
         type = auth
         ipaddr = *
@@ -353,6 +354,7 @@ listen {
               idle_timeout = 30
         }
 }
+
 listen {
         ipaddr = *
         port = 0
@@ -360,6 +362,7 @@ listen {
         limit {
         }
 }
+
 listen {
         type = auth
         port = 0
@@ -369,6 +372,7 @@ listen {
               idle_timeout = 30
         }
 }
+
 listen {
         ipv6addr = ::
         port = 0
@@ -376,6 +380,7 @@ listen {
         limit {
         }
 }
+
 authorize {
         filter_username
         preprocess
@@ -393,6 +398,7 @@ authorize {
         logintime
         pap
 }
+
 authenticate {
         Auth-Type PAP {
                 pap
@@ -407,12 +413,14 @@ authenticate {
         digest
         eap
 }
+
 preacct {
         preprocess
         acct_unique
         suffix
         files
 }
+
 accounting {
         detail
         unix
@@ -420,40 +428,48 @@ accounting {
         exec
         attr_filter.accounting_response
 }
+
 session {
         sql
 }
+
 post-auth {
         if (session-state:User-Name && reply:User-Name && request:User-Name && (reply:User-Name == request:User-Name)) {
                 update reply {
                         &User-Name !* ANY
                 }
         }
+        
         update {
                 &reply: += &session-state:
         }
         sql
         exec
         remove_reply_message_if_eap
+        
         Post-Auth-Type REJECT {
                 sql
                 attr_filter.access_reject
                 eap
                 remove_reply_message_if_eap
         }
+        
         Post-Auth-Type Challenge {
         }
 }
+
 pre-proxy {
 }
+
 post-proxy {
         eap
 }
+
 }
 ````
 Backup the original file:
 ````
-cp /etc/raddb/sites-available/inner-tunnel /etc/raddb/sites-available/inner-tunnel.ori
+mv /etc/raddb/sites-available/inner-tunnel /etc/raddb/sites-available/inner-tunnel.ori
 ````
 Edit /etc/raddb/sites-available/inner-tunnel file and replace the content with below configuration:
 ````
@@ -461,22 +477,27 @@ Edit /etc/raddb/sites-available/inner-tunnel file and replace the content with b
 ````
 ````
 server inner-tunnel {
+
 listen {
        ipaddr = 127.0.0.1
        port = 18120
        type = auth
 }
+
 authorize {
         filter_username
         chap
         mschap
         suffix
+        
         update control {
                 &Proxy-To-Realm := LOCAL
         }
+        
         eap {
                 ok = return
         }
+        
         files
         sql
         -ldap
