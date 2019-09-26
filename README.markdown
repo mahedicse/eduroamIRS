@@ -577,7 +577,7 @@ post-proxy {
 ````bash
 # yum install php-pear php-pear-DB php-devel php-mysql php-common php-gd php-mbstring php-mcrypt php php-xml -y
 ````
-**Installing Daloradius"
+**Installing Daloradius**
 
 Github method:
 ````
@@ -767,6 +767,7 @@ linelog f_ticks {
 }
 ````
 **Configure Proxy**
+
 Open /etc/raddb/proxy.conf file and insert the below configuration at the end of the file:
 
 ````
@@ -851,5 +852,25 @@ ENGINE: engine deinit
 MPPE keys OK: 0  mismatch: 1
 FAILURE
 ````
+**Logging:**
+To Enable logging edit **/etc/raddb/radiusd.conf** file and changed like:
+````
+   #  Log authentication requests to the log file.
+   #
+   #  allowed values: {no, yes}
+   #
+   auth = yes
+````
+Now check the log file:
 
+````
+# tail  /var/log/radius/radius.log
+````
+Output:
+
+````
+Thu Sep 26 18:34:30 2019 : Info: rlm_sql (sql): Opening additional connection (6), 1 of 26 pending slots used
+Thu Sep 26 18:34:30 2019 : Auth: (9)   Login OK: [mahedi@ins-20.ac.bd] (from client WLC-CONTROLLER-1 port 0 via TLS tunnel)
+Thu Sep 26 18:34:30 2019 : Auth: (10) Login OK: [mahedi@ins-20.ac.bd] (from client WLC-CONTROLLER-1 port 1 cli A4-50-46-30-E2-D7)
+````
 > **ProTip:** You can disable any **Markdown extension** in the **File properties** dialog.
