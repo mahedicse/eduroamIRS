@@ -634,10 +634,10 @@ Password: radius
 ![Home Page](https://user-images.githubusercontent.com/8054454/65595669-12448380-dfb7-11e9-9229-e2dde3605136.png)
 
 **Create an User:**
-![create-user](https://user-images.githubusercontent.com/8054454/65595735-32744280-dfb7-11e9-9a02-0a0ffc324bd9.png)
+![create-user](https://user-images.githubusercontent.com/8054454/65710206-5a959b80-e0b4-11e9-900d-952fab911c30.png)
 
 **List User:**
-![List-user](https://user-images.githubusercontent.com/8054454/65595777-4a4bc680-dfb7-11e9-994c-2d22c7750138.png)
+![List-user](https://user-images.githubusercontent.com/8054454/65710312-96306580-e0b4-11e9-9f0e-4b4fd6ed508b.png)
 
 **Now Test login from command line:**
 
@@ -868,7 +868,7 @@ Output:
 
 ````
 Thu Sep 26 18:34:30 2019 : Info: rlm_sql (sql): Opening additional connection (6), 1 of 26 pending slots used
-Thu Sep 26 18:34:30 2019 : Auth: (9)   Login OK: [mahedi@ins-20.ac.bd] (from client WLC-CONTROLLER-1 port 0 via TLS tunnel)
-Thu Sep 26 18:34:30 2019 : Auth: (10) Login OK: [mahedi@ins-20.ac.bd] (from client WLC-CONTROLLER-1 port 1 cli A4-50-46-30-E2-D7)
+Thu Sep 26 18:34:30 2019 : Auth: (9)   Login OK: [test@group-XY.ac.bd] (from client WLC-CONTROLLER-1 port 0 via TLS tunnel)
+Thu Sep 26 18:34:30 2019 : Auth: (10) Login OK: [test@group-XY.ac.bd] (from client WLC-CONTROLLER-1 port 1 cli A4-50-46-30-E2-D7)
 ````
 > **ProTip:** You can disable any **Markdown extension** in the **File properties** dialog.
