@@ -331,7 +331,10 @@ sql {
 ````
 # ln -s /etc/raddb/mods-available/sql /etc/raddb/mods-enabled/
 ````
-
+Restart Radius Service:
+````
+# systemctl restart radiusd
+````
 **Configure Default virtual server for MySQL login support:**
 
 At first backup the original file:
@@ -365,6 +368,7 @@ listen {
 }
 
 listen {
+        ipv6addr = ::
         type = auth
         port = 0
         limit {
