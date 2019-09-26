@@ -655,7 +655,33 @@ Sent Access-Request Id 227 from 0.0.0.0:51113 to 127.0.0.1:1812 length 87
         Cleartext-Password = "Mhd123"
 Received Access-Accept Id 227 from 127.0.0.1:1812 to 127.0.0.1:51113 length 20
 ````
+### Confiure WLC to connect and test authentication  ### 
 
+Open /etc/raddb/clients.conf file and insert the below configuration at the end of the file:
+
+````
+# vim /etc/raddb/clients.conf
+````
+
+````
+client irs-nro.bdren.net.bd {
+        ipaddr = 103.28.121.51
+        secret = IRS-LAB-20
+        require_message_authenticator = yes
+        shortname = irs-nro.bdren.net.bd
+        nastype = other
+        virtual_server = eduroam
+}
+
+
+client WLC-CONTROLLER-1 {
+    ipaddr         = 163.47.36.2
+    netmask        = 32
+    secret         = Radius-IRS-XY
+    shortname      = WLC-CONTROLLER-1
+    virtual_server = eduroam
+}
+````
 ### Confiure Radius for eduroam ### 
 
 **Now create a virtual server for eduroam**
@@ -740,10 +766,90 @@ linelog f_ticks {
         }
 }
 ````
+**Configure Proxy**
+Open /etc/raddb/proxy.conf file and insert the below configuration at the end of the file:
+
+````
+# vim /etc/raddb/proxy.conf
+````
+````
+home_server irs-nro {
+        type = auth+acct
+        ipaddr = 103.28.121.51
+        secret = IRS-LAB-XY
+        port = 1812
+        require_message_authenticator = yes
+        status_check = status-server
+}
+
+home_server_pool EDUROAM {
+        type = fail-over
+        home_server = irs-nro
+}
+
+realm LOCAL {
+}
+
+realm NULL {
+}
+
+realm ins-XY.ac.bd {
+}
+
+realm "~.+\\.ins-XY\\.ac\\.bd$" {
+}
+
+realm "~\\.3gppnetwork\\.org$" {
+    nostrip
+}
+
+realm "~.+$" {
+        pool = EDUROAM
+        nostrip
+}
+````
+
 **Restart Radius Service**
 
 ````
 # systemctl restart radiusd
+````
+**Now Test EAP Authentication**
+
+Create a file /etc/raddb/eap-test.conf 
+````
+# vim /etc/raddb/eap-test.conf
+````
+````
+#   eapol_test -c eap-test.conf -s testing123
+#
+network={
+        key_mgmt=WPA-EAP
+        eap=TTLS
+        identity="mahedi@ins-20.ac.bd"
+        #anonymous_identity="mahedi@ins-20.ac.bd"
+
+        # Uncomment to validate the server's certificate by checking
+        # it was signed by this CA.
+        #ca_cert="raddb/certs/ca.pem"
+        password="Mhd123"
+        phase2="auth=MSCHAPV2 mschapv2_retry=0"
+        phase1="peapver=0"
+}
+````
+Ouput for successful login:
+````
+EAP: deinitialize previously used EAP method (21, TTLS) at EAP deinit
+ENGINE: engine deinit
+MPPE keys OK: 1  mismatch: 0
+SUCCESS
+````
+Ouput for unsuccessful login:
+````
+EAP: deinitialize previously used EAP method (21, TTLS) at EAP deinit
+ENGINE: engine deinit
+MPPE keys OK: 0  mismatch: 1
+FAILURE
 ````
 
 > **ProTip:** You can disable any **Markdown extension** in the **File properties** dialog.
