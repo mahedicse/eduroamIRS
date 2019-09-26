@@ -678,6 +678,7 @@ client WLC-CONTROLLER-1 {
     ipaddr         = 163.47.36.2
     netmask        = 32
     secret         = Radius-IRS-XY
+    require_message_authenticator = yes
     shortname      = WLC-CONTROLLER-1
     virtual_server = eduroam
 }
