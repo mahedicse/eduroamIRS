@@ -34,7 +34,10 @@ ins-XY.ac.bd
 [root@pust ~]# vim /etc/selinux/config
 
 SELINUX=disabled
+````
+Now Reboot your server
 
+````
 # reboot
 ````
 
@@ -116,7 +119,9 @@ public
 
 ````bash
 # systemctl enable mariadb
-
+````
+Output:
+````
 Created symlink from /etc/systemd/system/multi-user.target.wants/mariadb.service to /usr/lib/systemd/system/mariadb.service.
 ````
 **Start MariaDB Service**
@@ -126,7 +131,9 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/mariadb.service
 **Check Status of MariaDB Service**
 ````bash
 # systemctl status mariadb
-   
+````
+Output:
+````
 ● mariadb.service - MariaDB database server
    Loaded: loaded (/usr/lib/systemd/system/mariadb.service; enabled; vendor preset: disabled)
    Active: active (running) since Wed 2019-09-18 16:48:39 +06; 46min ago
@@ -143,7 +150,8 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/mariadb.service
 # mysql -p
 
 Enter password:
-
+````
+````
 Welcome to the MariaDB monitor.  Commands end with ; or \g.
 Your MariaDB connection id is 2
 Server version: 5.5.60-MariaDB MariaDB Server
@@ -177,6 +185,9 @@ Bye
 **Enable Apache service on boot**
 ````bash
 # systemctl enable httpd
+````
+Output:
+````
 Created symlink from /etc/systemd/system/multi-user.target.wants/httpd.service to /usr/lib/systemd/system/httpd.service.
 ````
 **Start Apache Service**
@@ -188,6 +199,18 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/httpd.service t
 # systemctl status httpd
 
 ````
+Output:
+````
+● httpd.service - The Apache HTTP Server
+   Loaded: loaded (/usr/lib/systemd/system/httpd.service; enabled; vendor preset: disabled)
+   Active: active (running) since Thu 2019-09-26 14:40:43 +06; 9min ago
+     Docs: man:httpd(8)
+           man:apachectl(8)
+ Main PID: 5671 (httpd)
+   Status: "Total requests: 10; Current requests/sec: 0; Current traffic:   0 B/sec"
+   CGroup: /system.slice/httpd.service
+           ├─5671 /usr/sbin/httpd -DFOREGROUND
+````
 
 ## Installation and Configure Radius Server:
 
@@ -197,15 +220,22 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/httpd.service t
 ````
 **Start and enable freeradius to start at boot up:**
 ````bash
-# systemctl start radiusd.service
-
 # systemctl enable radiusd.service
- 
+````
+Output:
+````
 Created symlink from /etc/systemd/system/multi-user.target.wants/radiusd.service to /usr/lib/systemd/system/radiusd.service.
 ````
+````
+# systemctl start radiusd.service
+````
+
 **Now check the radius service status:**
 ````bash
 [root@ns1 ~]# systemctl status radiusd.service
+````
+Output:
+````
 ● radiusd.service - FreeRADIUS high performance RADIUS server.
    Loaded: loaded (/usr/lib/systemd/system/radiusd.service; enabled; vendor preset: disabled)
    Active: active (running) since Sun 2017-08-20 02:42:40 EDT; 22s ago
@@ -225,10 +255,11 @@ To Configure FreeRADIUS to use MariaDB, follow steps below.
 ````bash
 # mysql -u root -p radius < /etc/raddb/mods-config/sql/main/mysql/schema.sql
 ````
-– First you have to create a soft link for SQL under /etc/raddb/mods-enabled
+Backup orifinal file:
 ````
-# ln -s /etc/raddb/mods-available/sql /etc/raddb/mods-enabled/
+# mv /etc/raddb/mods-available/sql /etc/raddb/mods-available/sql.ori
 ````
+
 Configure SQL module /raddb/mods-available/sql and change the database connection parameters to suite your environment:
  
  ````bash
@@ -295,6 +326,11 @@ sql {
 }
 
 ````
+– Now you have to create a soft link for SQL under /etc/raddb/mods-enabled
+````
+# ln -s /etc/raddb/mods-available/sql /etc/raddb/mods-enabled/
+````
+
 **Configure Default virtual server for MySQL login support:**
 
 At first backup the original file:
