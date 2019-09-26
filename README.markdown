@@ -225,7 +225,10 @@ To Configure FreeRADIUS to use MariaDB, follow steps below.
 ````bash
 # mysql -u root -p radius < /etc/raddb/mods-config/sql/main/mysql/schema.sql
 ````
-
+– First you have to create a soft link for SQL under /etc/raddb/mods-enabled
+````
+# ln -s /etc/raddb/mods-available/sql /etc/raddb/mods-enabled/
+````
 Configure SQL module /raddb/mods-available/sql and change the database connection parameters to suite your environment:
  
  ````bash
