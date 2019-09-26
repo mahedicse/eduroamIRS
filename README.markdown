@@ -510,6 +510,7 @@ authorize {
         logintime
         pap
 }
+
 authenticate {
         Auth-Type PAP {
                 pap
@@ -523,10 +524,12 @@ authenticate {
         mschap
         eap
 }
+
 session {
         radutmp
         sql
 }
+
 post-auth {
         sql
         if (0) {
@@ -540,10 +543,12 @@ post-auth {
                         MS-MPPE-Send-Key !* ANY
                         MS-MPPE-Recv-Key !* ANY
                 }
+                
                 update {
                         &outer.session-state: += &reply:
                 }
         }
+        
         Post-Auth-Type REJECT {
                 sql
                 attr_filter.access_reject
@@ -552,10 +557,13 @@ post-auth {
                 }
         }
 }
+
 pre-proxy {
 }
+
 post-proxy {
         eap
+}
 }
 ````
 **Restart Radius Service:**
