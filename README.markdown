@@ -14,20 +14,20 @@
 ```` bash 
 # vim /etc/hostname
 
-irs-lab-XY.ins-XY.ac.bd
+irs-lab-XY.group-XY.ac.bd
 ````
 ```` bash 
-# hostname irs-lab-XY.ins-XY.ac.bd
+# hostname irs-lab-XY.group-XY.ac.bd
 ````
 ##### Check configuration:
 ```` bash 
 # hostname
 
-irs-lab-XY.ins-XY.ac.bd
+irs-lab-XY.group-XY.ac.bd
 ````
 ```` bash 
 # hostname -d
-ins-XY.ac.bd
+group-XY.ac.bd
 ````
 #### Disable Selinux:
 ```` bash
@@ -243,9 +243,6 @@ Output:
  Main PID: 8283 (radiusd)
    CGroup: /system.slice/radiusd.service
            └─8283 /usr/sbin/radiusd -d /etc/raddb
-
-Aug 20 02:42:39 ns1.mahedi.net systemd[1]: Starting FreeRADIUS high performance RADIUS server....
-Aug 20 02:42:40 ns1.mahedi.net systemd[1]: Started FreeRADIUS high performance RADIUS server..
 ````
 
 #### Configure FreeRADIUS:
@@ -645,9 +642,9 @@ Password: radius
 **Now Test login from command line:**
 
 ````
-[root@idp-irs raddb]# radtest mahedi@ins-XY.ac.bd Mhd123 localhost 0 testing123
+[root@idp-irs raddb]# radtest mahedi@group-XY.ac.bd Mhd123 localhost 0 testing123
 Sent Access-Request Id 227 from 0.0.0.0:51113 to 127.0.0.1:1812 length 87
-        User-Name = "mahedi@ins-XY.ac.bd"
+        User-Name = "mahedi@group-XY.ac.bd"
         User-Password = "Mhd123"
         NAS-IP-Address = 127.0.0.1
         NAS-Port = 0
@@ -699,7 +696,7 @@ server eduroam {
                 rewrite_calling_station_id
                 if ("%{client:shortname}" != "nro-1.bdren.net.bd") {
                         update request {
-                                &Operator-Name := "1ins-XY.ac.bd"
+                                &Operator-Name := "1group-XY.ac.bd"
                                 &Eduroam-SP-Country := "BD"
                         }
                 }
@@ -795,10 +792,10 @@ realm LOCAL {
 realm NULL {
 }
 
-realm ins-XY.ac.bd {
+realm group-XY.ac.bd {
 }
 
-realm "~.+\\.ins-XY\\.ac\\.bd$" {
+realm "~.+\\.group-XY\\.ac\\.bd$" {
 }
 
 realm "~\\.3gppnetwork\\.org$" {
@@ -828,8 +825,8 @@ Create a file /etc/raddb/eap-test.conf
 network={
         key_mgmt=WPA-EAP
         eap=TTLS
-        identity="mahedi@ins-20.ac.bd"
-        #anonymous_identity="mahedi@ins-20.ac.bd"
+        identity="mahedi@group-XY.ac.bd"
+        #anonymous_identity="mahedi@group-XY.ac.bd"
 
         # Uncomment to validate the server's certificate by checking
         # it was signed by this CA.
