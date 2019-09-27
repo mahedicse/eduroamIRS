@@ -32,7 +32,7 @@ group-XY.ac.bd
 ````
 #### Disable Selinux:
 ```` bash
-[root@pust ~]# vim /etc/selinux/config
+# vim /etc/selinux/config
 
 SELINUX=disabled
 ````
@@ -234,7 +234,7 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/radiusd.service
 
 **Now check the radius service status:**
 ````bash
-[root@ns1 ~]# systemctl status radiusd.service
+# systemctl status radiusd.service
 ````
 Output:
 ````
@@ -337,7 +337,7 @@ Restart Radius Service:
 
 At first backup the original file:
 ````
-mv /etc/raddb/sites-available/default /etc/raddb/sites-available/default.ori
+# mv /etc/raddb/sites-available/default /etc/raddb/sites-available/default.ori
 ````
 **Edit /etc/raddb/sites-available/default file and replace the content with below configuration:**
 ````
@@ -472,7 +472,7 @@ post-proxy {
 ````
 Backup the original file:
 ````
-mv /etc/raddb/sites-available/inner-tunnel /etc/raddb/sites-available/inner-tunnel.ori
+# mv /etc/raddb/sites-available/inner-tunnel /etc/raddb/sites-available/inner-tunnel.ori
 ````
 Edit /etc/raddb/sites-available/inner-tunnel file and replace the content with below configuration:
 ````
@@ -646,6 +646,9 @@ Password: radius
 
 ````
 [root@idp-irs raddb]# radtest test@group-XY.ac.bd test123 localhost 0 testing123
+````
+Output:
+````
 Sent Access-Request Id 227 from 0.0.0.0:51113 to 127.0.0.1:1812 length 87
         User-Name = "test@group-XY.ac.bd"
         User-Password = "test123"
@@ -843,7 +846,7 @@ network={
 ````
 Now test with eap:
 ````
-#   eapol_test -c /etc/raddb/eap-test.conf -s testing123
+# eapol_test -c /etc/raddb/eap-test.conf -s testing123
 ````
 > **Note:** Please replace **XY** with your group ID line **irs-lab-01.group-10.ac.bd**
 
