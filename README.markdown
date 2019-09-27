@@ -645,7 +645,7 @@ Password: radius
 **Now Test login from command line:**
 
 ````
-[root@idp-irs raddb]# radtest mahedi@group-XY.ac.bd Mhd123 localhost 0 testing123
+[root@idp-irs raddb]# radtest test@group-XY.ac.bd test123 localhost 0 testing123
 Sent Access-Request Id 227 from 0.0.0.0:51113 to 127.0.0.1:1812 length 87
         User-Name = "test@group-XY.ac.bd"
         User-Password = "test123"
