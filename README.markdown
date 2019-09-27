@@ -844,7 +844,7 @@ network={
 Now test with eap:
 ````
 #   eapol_test -c /etc/raddb/eap-test.conf -s testing123
-```
+````
 > **Note:** Please replace **XY** with your group ID line **irs-lab-01.group-10.ac.bd**
 
 Ouput for successful login:
