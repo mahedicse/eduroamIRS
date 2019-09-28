@@ -885,4 +885,4 @@ Thu Sep 26 18:34:30 2019 : Info: rlm_sql (sql): Opening additional connection (6
 Thu Sep 26 18:34:30 2019 : Auth: (9)   Login OK: [test@group-XY.ac.bd] (from client WLC-CONTROLLER-1 port 0 via TLS tunnel)
 Thu Sep 26 18:34:30 2019 : Auth: (10) Login OK: [test@group-XY.ac.bd] (from client WLC-CONTROLLER-1 port 1 cli A4-50-46-30-E2-D7)
 ````
-**!! Yah You done**
+
