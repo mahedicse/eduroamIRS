@@ -19,8 +19,9 @@ irs-lab-XY.group-XY.ac.bd
 ```` bash 
 # hostname irs-lab-XY.group-XY.ac.bd
 ````
-> **Note:** Please replace **XY** with your group ID line **irs-lab-01.group-01.ac.bd**
-##### Check configuration:
+> **Note:** Please replace **XY** with your group ID like: **irs-lab-01.group-01.ac.bd** 
+
+**Check Hostnane configuration:**
 ```` bash 
 # hostname
 
@@ -41,6 +42,13 @@ Now Reboot your server
 ````
 # reboot
 ````
+#### Secure SSH: 
+After install a Server and connect with public internet. It's essential to protect and secure remote access that prevent your Server from the attaker easy access. It's better to change default ssh port and disable direct root login from ssh.
+
+**Change SSH default port and disable root login:**
+> **Note:** Before disable root login and changed port you must create a user for remote login and allow changed port in firewall.
+
+
 
 #### Firewall Configuration: 
 
