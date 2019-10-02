@@ -43,10 +43,10 @@ Now Reboot your server
 # reboot
 ````
 #### Secure SSH: 
-After install a Server and connect with public internet. It's essential to protect and secure remote access that prevent your Server from the attacker easy access. It's better to change default ssh port and disable direct root login from ssh.
+After installing a Server and connect with the public internet. It's essential to protect and secure remote access that prevents your Server from the attacker's easy access. It's better to change the default ssh port and disable direct root login from ssh.
 
 **Change SSH default port and disable root login:**
-> **Note:** Before disable root login and changed port you must create a user for remote login and allow changed port in firewall.
+> **Note:** Before disabling root login and changed port you must create a user for remote login and allow changed port in the firewall.
 
 Create a User first:
 ````
@@ -68,7 +68,7 @@ passwd: all authentication tokens updated successfully.
 # vim /etc/ssh/sshd_config
 ````
 
-Uncomment line "port 22" and change the port number. Port new port number must be more than 1023 otherwise it will be conflit with others services. Here I use port number 2200.
+Uncomment line "port 22" and change the port number. Port new port number must be more than 1023 otherwise it will be a conflict with other services. Here I use port number 2200.
 
 ````
 Port 2200
@@ -94,8 +94,9 @@ Restart SSH Service:
 ````
 # systemctl restart sshd
 ````
-Now disceonnect from server and connect again with changed parametar:
-From terminal:
+Now disconnect from the server and connect again with changed parameters:
+
+From the terminal:
 ````
 # ssh  irs-lab@irs-lab-XY.bdren.net.bd -p2200
 ````
@@ -295,7 +296,7 @@ Output:
 
 #### Configure FreeRADIUS:
 
-To Configure FreeRADIUS to use MariaDB, follow steps below.
+To Configure FreeRADIUS to use MariaDB, follow the below steps.
 
 **Import the Radius database scheme to populate radius database**
 ````bash
