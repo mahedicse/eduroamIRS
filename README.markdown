@@ -43,7 +43,7 @@ Now Reboot your server
 # reboot
 ````
 #### Secure SSH: 
-After install a Server and connect with public internet. It's essential to protect and secure remote access that prevent your Server from the attaker easy access. It's better to change default ssh port and disable direct root login from ssh.
+After install a Server and connect with public internet. It's essential to protect and secure remote access that prevent your Server from the attacker easy access. It's better to change default ssh port and disable direct root login from ssh.
 
 **Change SSH default port and disable root login:**
 > **Note:** Before disable root login and changed port you must create a user for remote login and allow changed port in firewall.
@@ -63,8 +63,66 @@ Retype new password:
 
 passwd: all authentication tokens updated successfully.
 ````
+**Change SSH port and disable root login:**
+```
+# vim /etc/ssh/sshd_config
+````
 
+Uncomment line "port 22" and change the port number. Port new port number must be more than 1023 otherwise it will be conflit with others services. Here I use port number 2200.
 
+````
+Port 2200
+````
+To disable root login uncomment line "PermitRootLogin yes" and change yes to no
+
+````
+PermitRootLogin no
+````
+And finally allow changed port on firewall:
+
+````
+firewall-cmd --zone=public --permanent --add-port=2200/tcp
+
+firewall-cmd --reload
+````
+To see firewall set or not:
+````
+firewall-cmd --zone=public --permanent --list-all
+
+````
+Restart SSH Service:
+````
+# systemctl restart sshd
+````
+Now disceonnect from server and connect again with changed parametar:
+From terminal:
+````
+# ssh  irs-lab@irs-lab-XY.bdren.net.bd -p2200
+````
+Here check from **irs-lab-12** VM:
+````
+# ssh  irs-lab@irs-lab-12.bdren.net.bd -p2200
+
+The authenticity of host '[irs-lab-12.bdren.net.bd]:2200 ([103.28.121.93]:2200)' can't be established.
+RSA key fingerprint is e7:32:9c:9a:4a:6f:34:41:4e:45:2c:9a:b8:2b:28:a6.
+Are you sure you want to continue connecting (yes/no)? yes
+
+Warning: Permanently added '[irs-lab-12.bdren.net.bd]:2200,[103.28.121.93]:2200' (RSA) to the list of known hosts.
+
+irs-lab@irs-lab-12.bdren.net.bd's password: 
+
+[irs-lab@idp-irs-12 ~]$
+````
+To became root user:
+````
+[irs-lab@idp-irs-12 ~]$ su -
+
+Password: <insert root password>
+
+Last login: Wed Oct  2 13:24:02 +06 2019 from XXX.XXX.XXX.XXX on pts/0
+
+[root@idp-irs ~]#
+````
 #### Firewall Configuration: 
 
 ```` bash
@@ -203,40 +261,6 @@ MariaDB [(none)]> quit
 Bye
 ````
 
-### Install Apache Web Server:
-````bash 
-# yum install httpd httpd-devel -y
-````
-**Enable Apache service on boot**
-````bash
-# systemctl enable httpd
-````
-Output:
-````
-Created symlink from /etc/systemd/system/multi-user.target.wants/httpd.service to /usr/lib/systemd/system/httpd.service.
-````
-**Start Apache Service**
-````bash
-# systemctl start httpd
-````
-**Check Status of MariaDB Service**
-````bash
-# systemctl status httpd
-
-````
-Output:
-````
-● httpd.service - The Apache HTTP Server
-   Loaded: loaded (/usr/lib/systemd/system/httpd.service; enabled; vendor preset: disabled)
-   Active: active (running) since Thu 2019-09-26 14:40:43 +06; 9min ago
-     Docs: man:httpd(8)
-           man:apachectl(8)
- Main PID: 5671 (httpd)
-   Status: "Total requests: 10; Current requests/sec: 0; Current traffic:   0 B/sec"
-   CGroup: /system.slice/httpd.service
-           ├─5671 /usr/sbin/httpd -DFOREGROUND
-````
-
 ## Installation and Configure Radius Server:
 
 #### Install Radius Server:
@@ -275,7 +299,9 @@ To Configure FreeRADIUS to use MariaDB, follow steps below.
 
 **Import the Radius database scheme to populate radius database**
 ````bash
-# mysql -u root -p radius < /etc/raddb/mods-config/sql/main/mysql/schema.sql
+# mysql -u radius -p -D radius < /etc/raddb/mods-config/sql/main/mysql/schema.sql
+
+Enter password: <insert password for radius user>
 ````
 Backup orifinal file:
 ````
@@ -592,7 +618,46 @@ post-proxy {
 ````
 # systemctl restart radiusd
 ````
-### Installing and Configuring Daloradius:
+### Install Apache Web Server:
+````bash 
+# yum install httpd httpd-devel -y
+````
+**Enable Apache service on boot**
+````bash
+# systemctl enable httpd
+````
+Output:
+````
+Created symlink from /etc/systemd/system/multi-user.target.wants/httpd.service to /usr/lib/systemd/system/httpd.service.
+````
+**Start Apache Service**
+````bash
+# systemctl start httpd
+````
+**Check Status of Apache Service**
+````bash
+# systemctl status httpd
+
+````
+Output:
+````
+● httpd.service - The Apache HTTP Server
+   Loaded: loaded (/usr/lib/systemd/system/httpd.service; enabled; vendor preset: disabled)
+   Active: active (running) since Thu 2019-09-26 14:40:43 +06; 9min ago
+     Docs: man:httpd(8)
+           man:apachectl(8)
+ Main PID: 5671 (httpd)
+   Status: "Total requests: 10; Current requests/sec: 0; Current traffic:   0 B/sec"
+   CGroup: /system.slice/httpd.service
+           ├─5671 /usr/sbin/httpd -DFOREGROUND
+````
+**Check from browser:**
+
+Open Link: http://irs-lab-XY.bdren.net.bd
+
+It's show test page...
+
+### Installing and Configuring Daloradius Webtool for Freeradius:
 
 #### Install required php:
 ````bash
@@ -615,8 +680,8 @@ Change directory for configuration:
 Now import Daloradius mysql tables
 
 ````
-# mysql -u root -p radius < /var/www/html/daloradius/contrib/db/fr2-mysql-daloradius-and-freeradius.sql 
-# mysql -u root -p radius < /var/www/html/daloradius/contrib/db/mysql-daloradius.sql
+# mysql -u radius -p radius < /var/www/html/daloradius/contrib/db/fr2-mysql-daloradius-and-freeradius.sql 
+# mysql -u radius -p radius < /var/www/html/daloradius/contrib/db/mysql-daloradius.sql
 ````
 **Configure daloRADIUS database connection details:**
 Then change permissions for http folder and set the right permissions for daloradius configuration file.
@@ -681,7 +746,7 @@ Sent Access-Request Id 227 from 0.0.0.0:51113 to 127.0.0.1:1812 length 87
         Cleartext-Password = "Mhd123"
 Received Access-Accept Id 227 from 127.0.0.1:1812 to 127.0.0.1:51113 length 20
 ````
-> **Note:** Please replace **XY** with your group ID line **test@group-01.ac.bd**
+> **Note:** Please replace **XY** with your group ID like **test@group-01.ac.bd**
 
 ### Confiure WLC to connect and test authentication  ### 
 
@@ -856,13 +921,13 @@ Create a file /etc/raddb/eap-test.conf
 network={
         key_mgmt=WPA-EAP
         eap=TTLS
-        identity="mahedi@group-XY.ac.bd"
-        #anonymous_identity="mahedi@group-XY.ac.bd"
+        identity="test@group-XY.ac.bd"
+        #anonymous_identity="anonymous@group-XY.ac.bd"
 
         # Uncomment to validate the server's certificate by checking
         # it was signed by this CA.
         #ca_cert="raddb/certs/ca.pem"
-        password="Mhd123"
+        password="test123"
         phase2="auth=MSCHAPV2 mschapv2_retry=0"
         phase1="peapver=0"
 }
@@ -871,7 +936,7 @@ Now test with eap:
 ````
 # eapol_test -c /etc/raddb/eap-test.conf -s testing123
 ````
-> **Note:** Please replace **XY** with your group ID line **irs-lab-01.group-10.ac.bd**
+> **Note:** Please replace **XY** with your group ID like **irs-lab-01.group-01.ac.bd**
 
 Ouput for successful login:
 ````
