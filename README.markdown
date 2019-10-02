@@ -48,6 +48,21 @@ After install a Server and connect with public internet. It's essential to prote
 **Change SSH default port and disable root login:**
 > **Note:** Before disable root login and changed port you must create a user for remote login and allow changed port in firewall.
 
+Create a User first:
+````
+# adduser irs-lab
+````
+Set password for the user:
+````
+# passwd irs-lab
+
+Changing password for user irs-lab.
+
+New password:  
+Retype new password: 
+
+passwd: all authentication tokens updated successfully.
+````
 
 
 #### Firewall Configuration: 
