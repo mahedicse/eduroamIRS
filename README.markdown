@@ -892,10 +892,11 @@ realm NULL {
 realm group-XY.ac.bd {
 }
 
-realm "~.+\\.group-XY\\.ac\\.bd$" {
+realm "~(.*\.)*group-XT\.ac\.bdt$" {
+
 }
 
-realm "~\\.3gppnetwork\\.org$" {
+realm "~(.*\.)*3gppnetwork\.org$" {
     nostrip
 }
 
